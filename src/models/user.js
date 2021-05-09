@@ -58,9 +58,6 @@ userSchema.virtual("tasks", {
 userSchema.methods.toJSON = function(){
     const user = this;
     const userObject = user.toObject();
-
-   // console.log(this.password);
-   // console.log(userObject);
     delete userObject.password;
     delete userObject.tokens;
     delete userObject.avatar;
@@ -70,8 +67,7 @@ userSchema.methods.toJSON = function(){
 userSchema.methods.getAuthToken = async function(){
       
     const user = this;
-    console.log("this is from getAuthToken function");
-    console.log(user._id);
+   
     const token = jwt.sign({ _id: user._id.toString()} , "thisismytokensecret");
 
     user.tokens = user.tokens.concat({token});
@@ -95,22 +91,6 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 }
 
-// const test = async ({email, password}) => {
-//     try{
-//        const user = await User.findByCredentials(email, password);
-//        console.log(user);
-//     }
-//     catch(e)
-//     {
-//         console.log(e.message);
-//     }
-// }
-// const obj = {
-    
-//     email: "test1@abc.com",
-//     password : "password123"
-// }
-// test(obj);
 
 userSchema.pre('save', async function(next){
     

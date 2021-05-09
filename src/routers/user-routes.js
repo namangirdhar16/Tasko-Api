@@ -4,7 +4,6 @@ const User = require("../models/user");
 const multer = require("multer");
 const auth = require("../middleware/auth");
 const sharp = require("sharp");
-const { deleteOne } = require("../models/task");
 const { sendWelcomeEmail, sendCancellationEmail }   = require("../emails/account");
 
 userRouter.use(express.json());
@@ -16,8 +15,6 @@ userRouter.use(express.urlencoded({
 userRouter.post('/users', async (req, res) => {
 
     const user = new User(req.body);
-
-    
     try{
         const token = await user.getAuthToken();
         sendWelcomeEmail(req.body.name, req.body.email);
@@ -28,14 +25,9 @@ userRouter.post('/users', async (req, res) => {
     {
         res.status(404).send(e);
     }
-    // user.save().then(() => {
-    //     res.status(200).send(user);
-    // }).catch((error) => {
-    //     res.status(404).send(error);
-    // })
-
+   
 })
-//const middleware = multer().single();
+
 userRouter.post("/users/login", async (req, res) => {
    console.log(req.body.email,req.body.password);
     try{
@@ -44,7 +36,7 @@ userRouter.post("/users/login", async (req, res) => {
         const token = await user.getAuthToken();
         console.log(token);
        res.status(200).send({ user, token});
-    //    res.status(200).send({ user});
+    
     }
     catch(e)
     {
@@ -52,10 +44,11 @@ userRouter.post("/users/login", async (req, res) => {
        res.status(404).send(e.message);
     }
 });
+
 userRouter.post("/users/logout", auth, async(req, res) => {
     
     try{
-      // console.log(req.user);
+      
       console.log(req.user.tokens.length);
        req.user.tokens = req.user.tokens.filter((token) => {
             if(req.token != token);
@@ -65,8 +58,8 @@ userRouter.post("/users/logout", auth, async(req, res) => {
             }
        })
        await req.user.save();
-     //  console.log(req.user, req.token);
-     console.log(req.user.tokens.length);
+     
+     
        res.send();
     }
     catch(e)
@@ -106,10 +99,8 @@ const avatar = multer({
 });
 
 userRouter.post("/users/me/avatar", auth, avatar.single("avatar"), async (req, res) => {
+
     req.user.avatar = await sharp(req.file.buffer).resize({height: 180, width: 180}).png().toBuffer();
-    // req.user.avatar = req.file.buffer;
-    //console.log(req.body.name);
-   // console.log(req.file.buffer);
     await req.user.save();
     res.send();
 }, (err, req, res, next) => {
@@ -137,7 +128,7 @@ userRouter.get("/users/:id/avatar", auth, async(req, res) => {
 })
 
 userRouter.delete("/users/me/avatar", auth, async (req, res) => {
-   // const _id = req.user._id;
+  
     try{
       
          req.user.avatar = undefined;
@@ -152,26 +143,7 @@ userRouter.delete("/users/me/avatar", auth, async (req, res) => {
 })
 
 userRouter.get('/users/me', auth, async (req, res) => {
-
-   //res.set("Content-Type", "text/hmtl");
-
     res.status(200).send(req.user);
-    // try{
-    //     const users = await User.find({});
-    //     res.status(200).send(users);
-    // } 
-    // catch(e)
-    // {
-    //     res.status(404).send(e);
-    // }
-
-  
-
-    // User.find({}).then((users) => {
-    //     res.status(200).send(users);
-    // }).catch((err) => {
-    //     res.status(500).send(err);
-    // })
 })
 
 
@@ -190,15 +162,6 @@ userRouter.get('/users/:id', auth, async (req, res) => {
     {
         res.status(500).send(e);
     }
-
-
-    // User.findOne({ _id }).then((user) => {
-    //     if(!user)
-    //     res.status(404).send("user not found");
-    //     res.status(200).send(user);
-    // }).catch((err) => {
-    //     res.status(404).send(err);
-    // })
 })
 
 userRouter.patch("/users/me" , auth, async (req, res) => {
@@ -210,17 +173,16 @@ userRouter.patch("/users/me" , auth, async (req, res) => {
     
     if(!isValid)
     res.status(404).send("invalid updates");
-    //res.send(req.body);
+    
     try {
-        //const user = await User.findByIdAndUpdate({ _id }, req.body, { new: true});
-       // const user = await User.findById({ _id });
+        
         const user = req.user;
         updates.forEach((update) => {
             user[update] = req.body[update]
         })
 
         await user.save();
-      //  res.send(req.body);
+     
         if(!user)
         res.status(404).send("user does not exist");
         res.status(200).send(user);
@@ -240,12 +202,8 @@ userRouter.delete("/users/me", auth, async (req, res) => {
     try{
          await User.findByIdAndDelete({ _id });
          sendCancellationEmail(req.user.name, req.user.email);
-        const user = req.user;
-        //await deleteOne({ _id: user._id });
-        
-        // if(!user)
-        // res.status(404).send("user not found");
-        res.status(200).send(user);
+         const user = req.user;
+         res.status(200).send(user);
     }
     catch(e)
     {
