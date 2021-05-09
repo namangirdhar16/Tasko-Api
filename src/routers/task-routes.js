@@ -10,7 +10,7 @@ taskRouter.get('/tasks', auth, async (req, res) => {
   
     console.log(req.query.completed);
     try{
-        // const tasks = await Task.find({ author: req.user._id });
+        
         const match = {};
         const sort = {};
         if(req.query.completed)
@@ -39,13 +39,6 @@ taskRouter.get('/tasks', auth, async (req, res) => {
         res.status(404).send(e); 
     }
 
-
-
-    // User.find({}).then((users) => {
-    //     res.status(200).send(users);
-    // }).catch((err) => {
-    //     res.status(500).send(err);
-    // })
 })
 
 
@@ -64,13 +57,6 @@ taskRouter.post('/tasks', auth, async (req, res) => {
        res.status(404).send(task);
     }
 
-
-
-    // task.save().then(() => {
-    //     res.status(200).send(task);
-    // }).catch((error) => {
-    //     res.status(404).send(error);
-    // })
 })
 
 taskRouter.get('/tasks/:id', auth, async (req, res) => {
@@ -87,14 +73,7 @@ taskRouter.get('/tasks/:id', auth, async (req, res) => {
     {
         res.staus(500).send(e);
     }
-    // Task.findOne({ _id }).then((task) => {
-    //     if(!task)
-    //     res.status(404).send('task not found');
-    //     res.status(200).send(task);
-        
-    // }).catch((err) => {
-    //     res.status(500).send(err);
-    // })
+
 })
 
 taskRouter.patch("/tasks/:id", auth, async (req, res) => {
@@ -108,9 +87,6 @@ taskRouter.patch("/tasks/:id", auth, async (req, res) => {
     res.status(404).send("invalid updates");
 
     try{
-        //  const task = await Task.findByIdAndUpdate({ _id } , req.body, { new: true , runValidators: true, useFindAndModify: false });
-        
-        //const task = await Task.findById({ _id });
         const task = await Task.findOne({ _id , author: req.user._id });
 
         updates.forEach((update) => {
