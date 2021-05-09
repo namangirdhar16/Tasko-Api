@@ -19,7 +19,7 @@ userRouter.post('/users', async (req, res) => {
         const token = await user.getAuthToken();
         sendWelcomeEmail(req.body.name, req.body.email);
         await user.save();
-        res.status(200).send({user, token});
+        res.status(201).send({user, token});
     }
     catch(e)
     {
@@ -58,8 +58,6 @@ userRouter.post("/users/logout", auth, async(req, res) => {
             }
        })
        await req.user.save();
-     
-     
        res.send();
     }
     catch(e)
