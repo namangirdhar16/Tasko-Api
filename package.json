@@ -1,0 +1,26 @@
+{
+  "name": "todo-rest-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node src/index.js",
+    "start": "nodemon src/index.js"
+  },
+  "author": "naman",
+  "license": "ISC",
+  "keywords": [],
+  "description": "",
+  "dependencies": {
+    "@sendgrid/mail": "^7.4.4",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^9.0.1",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongodb": "^3.6.6",
+    "mongoose": "^5.12.5",
+    "sharp": "^0.28.1",
+    "validator": "^13.6.0"
+  }
+}
