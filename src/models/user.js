@@ -68,8 +68,8 @@ userSchema.methods.getAuthToken = async function(){
       
     const user = this;
    
-    const token = jwt.sign({ _id: user._id.toString()} , "thisismytokensecret");
-
+    const token = jwt.sign({ _id: user._id.toString()} , process.env.SECRET_KEY);
+   
     user.tokens = user.tokens.concat({token});
     await user.save();
     return token;
@@ -99,13 +99,9 @@ userSchema.pre('save', async function(next){
      
     if(user.isModified("password"))
     {   
-        console.log("hello");
+       
         user.password = await bcrypt.hash(user.password, 8);
-        console.log(user);
-    }
-    else
-    {
-        console.log("hello");
+       
     }
    
     next();

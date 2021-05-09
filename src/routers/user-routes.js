@@ -29,12 +29,12 @@ userRouter.post('/users', async (req, res) => {
 })
 
 userRouter.post("/users/login", async (req, res) => {
-   console.log(req.body.email,req.body.password);
+  // console.log(req.body.email,req.body.password);
     try{
         
         const user = await User.findByCredentials(req.body.email, req.body.password);
         const token = await user.getAuthToken();
-        console.log(token);
+        //console.log(token);
        res.status(200).send({ user, token});
     
     }
@@ -49,11 +49,11 @@ userRouter.post("/users/logout", auth, async(req, res) => {
     
     try{
       
-      console.log(req.user.tokens.length);
+//      console.log(req.user.tokens.length);
        req.user.tokens = req.user.tokens.filter((token) => {
             if(req.token != token);
             {
-                console.log(token._id);
+  //              console.log(token._id);
                 return req.token === token;
             }
        })

@@ -1,7 +1,7 @@
 
 const sgMail = require("@sendgrid/mail");
 
-sgMail.setApiKey(process.env.sendGridKey);
+sgMail.setApiKey(process.env.SEND_GRID_KEY);
 
 const sendWelcomeEmail = (name, email) => {
     const msg = {
@@ -27,7 +27,7 @@ const sendCancellationEmail = (name, email) => {
     const msg = {
         to: `${email}`, 
         from: 'girdharnaman1611@gmail.com', 
-        subject: 'Cancellatoin Email',
+        subject: 'Cancellation Email',
         text: 'Ah! you left :(, please tell us why?',
     }
       sgMail
